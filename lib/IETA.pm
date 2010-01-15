@@ -1,5 +1,6 @@
 package IETA;
 
+use 5.10.0;
 use Moose;
 
 =head1 NAME
