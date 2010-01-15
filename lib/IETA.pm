@@ -3,62 +3,72 @@ package IETA;
 use 5.10.0;
 use Moose;
 
+use IETA::Config;
+
+has 'config' => (
+	isa     => "IETA::Config",
+	is      => "rw",
+	builder => "_build_config",
+);
+
+sub _build_config {
+	return IETA::Config->load_config;
+}
+
+sub run {
+	return;
+}
+
+1;
+
+__END__
+
 =head1 NAME
 
 IETA - Improved Enemy Territory Admin Mod
 
 =head1 VERSION
 
-Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
+This documentation refers to version 0.01.
 
 =head1 SYNOPSIS
 
-This module is a rewrite of the famous Enemy Territory Admin Mod.
+	use IETA;
+	my $IETA = IETA->new;
+	$IETA->run;
 
-    use IETA;
+=head1 DESCRIPTION
 
-    my $IETA = IETA->new();
-    $IETA->run
+The IETA class implants an Enemy Territory Admin Mod which helps the Admins and provides more functionality to Server Admins and the players.
+
+=head1 ATTRIBUTES
+
+=head2 config (IETA::Config)
+
+Helds the IETA Config.
 
 =head1 METHODS
 
-=over 4
+=head2 run ()
 
-=item run
-With this method you run the IETA and force it to start the various submodules!
+Runs the IETA
 
-=back
+=head1 DEPENDENCIES
 
-=cut
+L<Moose>
 
-sub run {
-	return;
-}
+=head1 BUGS AND LIMITATIONS
+
+None known currently, please email the author if you find any.
 
 =head1 AUTHOR
 
-Stephan Jauernick, C<< <stephan at stejau.de> >>
+Stephan Jauernick (stephanj@cpan.org)
 
-=head1 SUPPORT
+=head1 LICENCE
 
-Simply ask stephan48 in irc.perl.org. 
+Copyright 2010 by stephan Jauernick.
 
-=head1 ACKNOWLEDGEMENTS
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2010 Stephan Jauernick.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
+This software is free.  It is licensed under the same terms as Perl itself.
 
 =cut
-
-1;

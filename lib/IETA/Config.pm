@@ -4,49 +4,18 @@ use 5.10.0;
 use Moose;
 use MooseX::Storage;
 use FindBin;
+use Carp;
 
 with Storage('format' => 'YAML', 'io' => 'File');
 
-=head1 NAME
-
-IETA::Config - Improved Enemy Territory Admin Mod Config
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
 our $VERSION = '0.01';
-
-=head1 SYNOPSIS
-
-This module provides a Config for the IETA.
-
-    use IETA::Config;
-    my $IETA = IETA::Config->load_config();
-
-=head1 METHODS
-
-=over 4
-
-=item load_config()
-Loads the config from filesystem. Takes an optional argument which specifices a absolute path to the yaml config file.
-When no arg is given it uses the etc dir in the dir where the bin dir is.
-
-=cut
 
 sub load_config {
 	my $self     = shift;
 	my $filename = shift || "$FindBin::Bin/../etc/config.yaml";
+	croak "Config file not Found! run bin/init_config.pl first!\n" if !(-e $filename);
 	return $self->load($filename);
 }
-
-=item save_config()
-Save the config from filesystem. Takes an optional argument which specifices a absolute path to the yaml config file.
-When no arg is given it uses the etc dir in the dir where the bin dir is.
-
-=cut
 
 sub save_config {
 	my $self = shift;
@@ -54,28 +23,59 @@ sub save_config {
 	$self->store($filename);
 }
 
-=back
+1;
+
+__END__
+
+=head1 NAME
+
+IETA::Config - Improved Enemy Territory Admin Mod Config
+
+=head1 VERSION
+
+This documentation refers to version 0.01.
+
+=head1 SYNOPSIS
+
+	use IETA::Config;
+    my $IETA = IETA::Config->load_config();
+
+=head1 DESCRIPTION
+
+The IETA class implants an Enemy Territory Admin Mod which helps the Admins and provides more functionality to Server Admins and the players.
+
+=head1 ATTRIBUTES
+
+=head2 config (IETA::Config)
+
+Helds the IETA Config.
+
+=head1 METHODS
+
+=head2 save_config ()
+Save the config from filesystem. Takes an optional argument which specifices a absolute path to the yaml config file.
+When no arg is given it uses the etc dir in the dir where the bin dir is.
+
+=head2 load_config ()
+Loads the config from filesystem. Takes an optional argument which specifices a absolute path to the yaml config file.
+When no arg is given it uses the etc dir in the dir where the bin dir is.
+
+=head1 DEPENDENCIES
+
+L<Moose>
+
+=head1 BUGS AND LIMITATIONS
+
+None known currently, please email the author if you find any.
 
 =head1 AUTHOR
 
-Stephan Jauernick, C<< <stephan at stejau.de> >>
+Stephan Jauernick (stephanj@cpan.org)
 
-=head1 SUPPORT
+=head1 LICENCE
 
-Simply ask stephan48 in irc.perl.org. 
+Copyright 2010 by stephan Jauernick.
 
-=head1 ACKNOWLEDGEMENTS
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2010 Stephan Jauernick.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
+This software is free.  It is licensed under the same terms as Perl itself.
 
 =cut
-
-1;
