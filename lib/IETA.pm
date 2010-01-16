@@ -3,8 +3,15 @@ package IETA;
 use 5.10.0;
 use Moose;
 
+sub POE::Kernel::ASSERT_EVENTS  () { 1 }
+sub POE::Kernel::TRACE_EVENTS  () { 0 }
+use POE::Kernel;
+
 use IETA::Config;
 use IETA::Log;
+use IETA::Receiver;
+
+use Data::Dumper;
 
 has 'config' => (
 	isa      => "IETA::Config",
@@ -20,6 +27,13 @@ has 'log' => (
 	required => 1,
 );
 
+has 'receiver' => (
+	isa      => "IETA::Receiver",
+	is       => "rw",
+	builder  => "_build_receiver",
+	required => 1,
+);
+
 sub _build_config {
 	return IETA::Config->load_config;
 }
@@ -29,10 +43,47 @@ sub _build_log {
 	return IETA::Log->new(app => $self);
 }
 
+sub _build_receiver {
+	my ($self) = shift;
+	return IETA::Receiver->new(app => $self);
+}
+
 sub run {
 	my ($self) = @_;
-	$self->log->info("TEST");
+	$self->log->info("Starting IETA");
+	$self->_install_sig_handler;
+	$self->_poe_start;
+	$self->log->info("Stopping IETA");
 	return;
+}
+
+sub _install_sig_handler {
+	my ($self) = @_;
+	$self->log->info("Installing SIG Handles");
+	$SIG{'INT'} = sub { $self->handle_sig };
+	$SIG{'TERM'} = sub { $self->handle_sig };
+	$self->log->info("SIG Handles Installed");
+}
+
+sub _poe_start {
+	my ($self) = @_;
+	$self->log->info("Starting POE Event Handler");
+	POE::Kernel->run();
+	$self->log->info("POE Event Handler Finished");
+}
+
+sub _poe_shutdown {
+	my ($self) = @_;
+	POE::Kernel->post($self->receiver->get_session_id, "shutdown");
+	POE::Kernel->run();
+	$self->log->info("POE Event Handler Finished");
+}
+
+
+sub handle_sig {
+	my ($self, $sig) = @_;
+	$self->log->info("Got Shutdown Signal");
+	exit(0);
 }
 
 1;
