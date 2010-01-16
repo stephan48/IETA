@@ -14,6 +14,19 @@ has _logger => (
     isa        => 'Log::Log4perl::Logger',
     accessor   => 'logger',
     lazy_build => 1,
+	handles => {
+		alert     => 'fatal',
+		critical  => 'fatal',
+		debug     => 'debug',
+        emergency => 'fatal',
+		error     => 'error',
+        info      => 'info',
+        notice    => 'info',
+        warning   => 'warn',
+    	lod		  => 'info',
+		warn      => 'warn',
+		fatal     => 'fatal',
+	}
 );
 
 sub _build__logger {
@@ -33,45 +46,60 @@ sub get_logger {
 	return Log::Log4perl->get_logger($namespace || $self);
 }
 
-sub alert {
-	shift->logger->fatal(@_);
-}
-
-sub critical {
-    shift->logger->fatal(@_);
-}
-
-sub debug {
-    shift->logger->debug(@_);
-}
-
-sub emergency {
-    shift->logger->fatal(@_);
-}
-
-sub error {
-    shift->logger->error(@_);
-}
-
-sub info {
-    shift->logger->info(@_);
-}
-
-sub notice {
-    shift->logger->info(@_);
-}
-
-sub warning {
-    shift->logger->warn(@_);
-}
-
-sub log {
-    shift->logger->log(@_);
-}
-
 sub get_path_to_var {
 	return "$FindBin::Bin/../var/";
 }
 
 1;
 __END__
+
+=head1 NAME
+
+IETA::Log - Improved Enemy Territory Admin Mod Logger
+
+=head1 VERSION
+
+This documentation refers to version 0.01.
+
+=head1 SYNOPSIS
+
+	use IETA;
+    my $IETA = IETA->new;
+
+=head1 DESCRIPTION
+
+The IETA::Log class implants an Enemy Territory Admin Mod Logger.
+
+=head1 ATTRIBUTES
+
+=head2 app (IETA)
+
+Helds the IETA app Object.
+
+=head2 logger (IETA)
+
+Helds the Logger Object.
+
+=head1 METHODS
+
+Look for Log4perl for a list!
+
+=head1 DEPENDENCIES
+
+L<Moose>,L<Log::Log4perl>
+
+=head1 BUGS AND LIMITATIONS
+
+None known currently, please email the author if you find any.
+
+=head1 AUTHOR
+
+Stephan Jauernick (stephanj@cpan.org)
+
+=head1 LICENCE
+
+Copyright 2010 by stephan Jauernick.
+
+This software is free.  It is licensed under the same terms as Perl itself.
+
+=cut

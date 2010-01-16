@@ -46,11 +46,11 @@ This documentation refers to version 0.01.
 =head1 SYNOPSIS
 
 	use IETA::Config;
-    my $IETA = IETA::Config->load_config();
+    my $IETA_config = IETA::Config->load_config();
 
 =head1 DESCRIPTION
 
-The IETA class implants an Enemy Territory Admin Mod which helps the Admins and provides more functionality to Server Admins and the players.
+The IETA Config class implants an Enemy Territory Admin Mod Config.
 
 =head1 ATTRIBUTES
 
@@ -70,7 +70,7 @@ When no arg is given it uses the etc dir in the dir where the bin dir is.
 
 =head1 DEPENDENCIES
 
-L<Moose>
+L<Moose>,L<MooseX::Storage>
 
 =head1 BUGS AND LIMITATIONS
 
