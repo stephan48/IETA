@@ -4,18 +4,34 @@ use 5.10.0;
 use Moose;
 
 use IETA::Config;
+use IETA::Log;
 
 has 'config' => (
-	isa     => "IETA::Config",
-	is      => "rw",
-	builder => "_build_config",
+	isa      => "IETA::Config",
+	is       => "rw",
+	builder  => "_build_config",
+	lazy_build => 1,
+);
+
+has 'log' => (
+	isa      => "IETA::Log",
+	is       => "rw",
+	builder  => "_build_log",
+	required => 1,
 );
 
 sub _build_config {
 	return IETA::Config->load_config;
 }
 
+sub _build_log {
+	my ($self) = shift;
+	return IETA::Log->new(app => $self);
+}
+
 sub run {
+	my ($self) = @_;
+	$self->log->info("TEST");
 	return;
 }
 

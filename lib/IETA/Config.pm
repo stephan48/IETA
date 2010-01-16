@@ -6,9 +6,17 @@ use MooseX::Storage;
 use FindBin;
 use Carp;
 
+use IETA::Config::Log;
+
 with Storage('format' => 'YAML', 'io' => 'File');
 
 our $VERSION = '0.01';
+
+has 'log' => (
+    is  => "rw",
+    isa => "IETA::Config::Log",
+    required => 1,
+);
 
 sub load_config {
 	my $self     = shift;
@@ -46,9 +54,9 @@ The IETA class implants an Enemy Territory Admin Mod which helps the Admins and 
 
 =head1 ATTRIBUTES
 
-=head2 config (IETA::Config)
+=head2 log (IETA::Config::Log)
 
-Helds the IETA Config.
+Helds the IETA::Log Config.
 
 =head1 METHODS
 
