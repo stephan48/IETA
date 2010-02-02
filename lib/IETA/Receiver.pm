@@ -21,13 +21,7 @@ sub _build__reader {
 
 sub START {
     my ($self) = @_;
-    $self->yield('ping');
 }
-
-event ping => sub {
-    my ($self) = @_;
-    $self->yield('ping');
-};
 
 event line => sub {
     my ($self, $line) = @_;

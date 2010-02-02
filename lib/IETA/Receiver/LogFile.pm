@@ -1,12 +1,13 @@
 package IETA::Receiver::LogFile;
 
+use 5.10.0;
 use MooseX::POE::SweetArgs;
 use POE::Wheel::FollowTail;
 
 has app => (
     isa      => 'IETA',
     is       => 'ro',
-    required => 1,
+    required => 0,
 );
 
 has _log_file_tailer => (
@@ -19,10 +20,9 @@ has _log_file_tailer => (
 sub _build__log_file_tailer {
 	my ($self) = @_;
 	return POE::Wheel::FollowTail->new(
-        Filename   => "Q:\\GameServer\\WolfensteinEnemyTerritory\\IETA\\var\\test.txt",
-        InputEvent => sub { $self->got_line },
-        ErrorEvent => sub { $self->got_error },
-        SeekBack   => 1024,
+        Filename   => "Q:\\GameServer\\WolfensteinEnemyTerritory\\nq\\etconsole.log",
+        InputEvent => sub { $self->got_line(@_[ARG0..$#_]); },
+        ErrorEvent => sub { $self->got_error(@_[ARG0..$#_]); },
     );
 }
 
@@ -33,12 +33,12 @@ sub START {
 
 sub got_line {
 	my ($self, $line) = @_;
-	print $line;
+	say($line);
 };
 
 sub got_error {
 	my ($self, $line) = @_;
-	print $line;
+	say $line;
 };
 
 no MooseX::POE::SweetArgs;
